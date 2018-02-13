@@ -30,30 +30,35 @@
 
 // Пример простого сервера в качестве основы
 
-'use strict';
+"use strict";
+const url = require("url");
+const fs = require("fs");
+const sendFile = require('./sendFile')
 
-let url = require('url');
-let fs = require('fs');
+require("http")
+  .createServer(function(req, res) {
+    let pathname = decodeURI(url.parse(req.url).pathname);
 
-require('http').createServer(function(req, res) {
+    switch (req.method) {
+      case "GET":
+        if (pathname == "/") {
+          const file = new fs.ReadStream(__dirname + "/public/index.html");
+          sendFile(file, res);
+          return;
+        }
 
-  let pathname = decodeURI(url.parse(req.url).pathname);
+        case "POST":
+            if (pathname == "/") {
+                const file = new fs.ReadStream(__dirname + "/public/index.html");
+                sendFile(file, res);
+                return;
+            }
 
-  switch(req.method) {
-  case 'GET':
-    if (pathname == '/') {
-      // отдачу файлов следует переделать "правильно", через потоки, с нормальной обработкой ошибок
-      fs.readFile(__dirname + '/public/index.html', (err, content) => {
-        if (err) throw err;
-        res.setHeader('Content-Type', 'text/html;charset=utf-8');
-        res.end(content);
-      });
-      return;
+      default:
+        res.statusCode = 502;
+        res.end("Not implemented");
     }
+  })
+  .listen(4000);
 
-  default:
-    res.statusCode = 502;
-    res.end("Not implemented");
-  }
 
-}).listen(3000);
