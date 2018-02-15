@@ -42,6 +42,20 @@ require("http")
 
     switch (req.method) {
       case "GET":
+        if (pathname === "/example.txt") {
+          fs.exists("files/" + pathname, exists => {
+            if (exists) {
+              const file = new fs.ReadStream("files/example.txt");
+              sendFile(file, res);
+            } else {
+              res.statusCode = 404;
+              res.end("not found");
+            }
+          });
+
+          return;
+        }
+
         if (pathname === "/") {
           const file = new fs.ReadStream(__dirname + "/public/index.html");
           sendFile(file, res);
