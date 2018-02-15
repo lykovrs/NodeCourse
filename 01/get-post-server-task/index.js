@@ -33,7 +33,8 @@
 "use strict";
 const url = require("url");
 const fs = require("fs");
-const sendFile = require('./sendFile')
+const sendFile = require("./sendFile");
+const createFile = require("./createFile");
 
 require("http")
   .createServer(function(req, res) {
@@ -41,18 +42,33 @@ require("http")
 
     switch (req.method) {
       case "GET":
-        if (pathname == "/") {
+        if (pathname === "/") {
           const file = new fs.ReadStream(__dirname + "/public/index.html");
           sendFile(file, res);
           return;
         }
 
-        case "POST":
-            if (pathname == "/") {
-                const file = new fs.ReadStream(__dirname + "/public/index.html");
-                sendFile(file, res);
-                return;
-            }
+      case "POST":
+        createFile(req, res);
+        return;
+
+      case "DELETE":
+        fs.exists("files/example.txt", exists => {
+          if (exists) {
+            fs.unlink("files/example.txt", err => {
+              if (err) throw err;
+              console.log("successfully deleted example.txt");
+            });
+
+            res.statusCode = 200;
+            res.end("OK");
+          } else {
+            res.statusCode = 404;
+            res.end("file not found");
+          }
+        });
+
+        return;
 
       default:
         res.statusCode = 502;
@@ -60,5 +76,3 @@ require("http")
     }
   })
   .listen(4000);
-
-
