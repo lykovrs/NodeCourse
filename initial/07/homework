@@ -1,0 +1,14 @@
+подключить любую oauth 2.0 стратегию паспорта
+сделать регистрацию пользователей с подтверждением email
+  User.create(
+    isEmailConfirmed: false,
+    token: RANDOM_TOKEN
+  )
+
+  // application.com/confirmation/%token%
+  sendMail({ token })
+
+  isEmailConfirmed: true
+  ctx.login()
+
+  
