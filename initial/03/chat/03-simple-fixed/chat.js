@@ -32,7 +32,7 @@ const server = http.createServer(function(req, res) {
     // console.log("publish");
     req.setEncoding('utf-8');
 
-    const body = '';
+    let body = '';
 
     req
       .on('data', function(data) {
@@ -88,7 +88,7 @@ const server = http.createServer(function(req, res) {
 // for tests if needed
 server._clients = clients;
 
-server.listen(3000);
+server.listen(3001);
 
 module.exports = server;
 

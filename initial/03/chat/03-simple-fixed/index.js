@@ -84,7 +84,7 @@ const server = http.createServer(function(req, res) {
 // for tests if needed
 server._clients = clients;
 
-server.listen(3000);
+server.listen(3001);
 
 module.exports = server;
 
