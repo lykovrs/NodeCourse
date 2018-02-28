@@ -80,3 +80,5 @@ router.get("/", async function(ctx) {
 app.use(router.routes());
 
 app.listen(config.get("port"));
+
+module.exports = app
